@@ -1,8 +1,10 @@
 import express from "express";
-import bodyParser, { urlencoded } from "body-parser";
+import { dirname } from "path";
+import { fileURLToPath } from "url";
+import bodyParser from "body-parser";
 
 // Access the begining/core of the path where to find the files. It can vary from different computers and servers.
-const __dirname = driname(fileURLToPath(import.meta.url));
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 // Use express framework
 const app = express();
@@ -17,7 +19,6 @@ app.get("/", (req, res) => {
 
 // Mount bodyParser middleware to make easier for our server to work and understand the information sent by the user that got encoded on the URL.
 app.use(bodyParser.urlencoded({ extended: true}));
-
 
 app.listen(port, () => {
   console.log(`Listening on port ${port}`);
