@@ -3,7 +3,9 @@ import { dirname } from "path";
 import { fileURLToPath } from "url";
 import bodyParser from "body-parser";
 
-// Access the begining/core of the path where to find the files. It can vary from different computers and servers.
+// Access the beginning of the path (directory name) where to find the files. It can vary on different computers and servers.
+// The `dirname` function extracts the directory name from the URL.
+// The `fileURLToPath` function converts the directory part of the URL to a file path format (since URLs and file paths have different formats).
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
 // Use express framework
@@ -19,6 +21,20 @@ app.get("/", (req, res) => {
 
 // Mount bodyParser middleware to make easier for our server to work and understand the information sent by the user that got encoded on the URL.
 app.use(bodyParser.urlencoded({ extended: true}));
+
+let bandName;
+
+const generateBandName = (req, res, next) => {
+    bandName = req.body.street + req.body.pet;
+    next()
+}
+
+app.use(generateBandName)
+
+app.post("/submit", (req, res) => {
+  const resposeText = `<h1>Your band name is:</h1><br><h2>${bandName} 🎸</h2>`;
+  res.send(resposeText);
+})
 
 app.listen(port, () => {
   console.log(`Listening on port ${port}`);
